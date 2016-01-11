@@ -6,7 +6,7 @@
 /*   By: ldubos <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/04 13:48:49 by ldubos            #+#    #+#             */
-/*   Updated: 2016/01/11 12:01:11 by ldubos           ###   ########.fr       */
+/*   Updated: 2016/01/11 14:35:43 by ldubos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int					main(int argc, char **argv)
 				&img.endian);
 		e.img = img;
 		e.win = mlx_new_window(e.mlx, e.width, e.height, "42 | FdF");
-		draw_line(&e.img, (t_vec2){.x = 0, .y = 799}, (t_vec2){.x = 799, .y = -799}, 0xFFFF00);
+		draw_line(&e.img, (t_vec2){.x = 0, .y = 799}, (t_vec2){.x = 799, .y = 0}, 0xFFFF00);
 		mlx_put_image_to_window(e.mlx, e.win, e.img.img, 0, 0);
 		mlx_expose_hook(e.win, expose_hook, &e);
 		mlx_loop(e.mlx);

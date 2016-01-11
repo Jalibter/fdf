@@ -6,7 +6,7 @@
 /*   By: ldubos <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/09 16:36:25 by ldubos            #+#    #+#             */
-/*   Updated: 2016/01/11 11:57:43 by ldubos           ###   ########.fr       */
+/*   Updated: 2016/01/11 14:34:51 by ldubos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,173 +25,51 @@ void				put_pixel(t_img *img, t_vec2 p, int color)
 	}
 }
 
-void				draw_tall_line(t_img *img, t_vec2 a, t_vec2 b, int color)
+void				draw_line_pta(t_img *img, t_vec2 a, t_vec2 b, int color)
 {
+	t_vec2			p;
+
+	p.x = a.x;
+	while (p.x < b.x)
+	{
+		p.y = a.y + ((b.y - a.y) * (p.x - a.x)) / (b.x - a.x);
+		put_pixel(img, p, color);
+		++p.x;
+	}
+}
+
+void				draw_line_ptb(t_img *img, t_vec2 a, t_vec2 b, int color)
+{
+	t_vec2			p;
+
+	p.y = a.y;
+	while (p.y < b.y)
+	{
+		p.x = a.x + ((b.x - a.x) * (p.y - a.y)) / (b.y - a.y);
+		put_pixel(img, p, color);
+		++p.y;
+	}
 
 }
 
 void				draw_line(t_img *img, t_vec2 a, t_vec2 b, int color)
 {
-	t_vec2			d;
-	int				e;
+	t_vec2			p;
 
-	if ((d.x = b.x - a.x) != 0)
-		if (d.x > 0)
-		{
-			d.x *= 2;
-			d.y *= 2;
-			if ((d.y = b.y - a.y) != 0)
-				if (d.y > 0)
-					if (d.x >= d.y)
-					{
-						e = d.x / 2;
-						while (1)
-						{
-							put_pixel(img, a, color);
-							if ((++a.x) == b.x)
-								break ;
-							if ((e -= d.y) < 0)
-							{
-								++a.y;
-								e += d.x;
-							}
-						}
-					}
-					else
-					{
-						e = d.y / 2;
-						while (1)
-						{
-							put_pixel(img, a, color);
-							if ((++a.y) == b.y)
-								break ;
-							if ((e -= d.x) < 0)
-							{
-								++a.x;
-								e += d.y;
-							}
-						}
-					}
-				else
-				{
-					if (d.x >= -d.y)
-					{
-						e = d.x / 2;
-							while (1)
-							{
-								put_pixel(img, a, color);
-								if ((++a.x) == b.x)
-									break ;
-								if ((e += d.y) < 0)
-								{
-									--a.y;
-									e += d.x;
-								}
-							}
-					}
-					else
-					{
-						e = d.y / 2;
-						while (1)
-						{
-							put_pixel(img, a, color);
-							if ((++a.y) == b.y)
-								break ;
-							if ((e += d.x) > 0)
-							{
-								++a.x;
-								e += d.y;
-							}
-						}
-					}
-				}
-			else
-				while ((++a.x) != b.x)
-					put_pixel(img, a, color);
-
-		}
-		else if ((d.y = b.y - a.y) != 0)
-			if (d.y > 0)
-			{
-				d.x *= 2;
-				d.y *= 2;
-				if (-d.x >= d.y)
-				{
-					e = d.x / 2;
-					while (1)
-					{
-						put_pixel(img, a, color);
-						if ((++a.x) == b.x)
-							break ;
-						if ((e += d.y) >= 0)
-						{
-							++a.y;
-							e += d.x;
-						}
-					}
-				}
-				else
-				{
-					e = d.y / 2;
-					while (1)
-					{
-						put_pixel(img, a, color);
-						if ((++a.y) == b.y)
-							break ;
-						if ((e += d.x) <= 0)
-						{
-							++a.x;
-							e += d.y;
-						}
-					}
-				}
-			}
-			else 
-				if (d.x <= d.y)
-				{
-					d.x *= 2;
-					d.y *= 2;
-					e = d.x / 2;
-					while (1)
-					{
-						put_pixel(img, a, color);
-						if ((++a.x) == b.x)
-							break ;
-						if ((e -= d.y) >= 0)
-						{
-							--a.y;
-							e += d.x;
-						}
-					}
-				}
-				else
-				{
-					d.x *= 2;
-					d.y *= 2;
-					e = d.y / 2;
-					while (1)
-					{
-						put_pixel(img, a, color);
-						if ((--a.y) == b.y)
-							break ;
-						if ((e -= d.x))
-						{
-							--a.x;
-							e += d.y;
-						}
-					}
-				}
+	p.x = a.x - b.x;
+	p.y = a.y - b.y;
+	if (p.x < 0)
+		p.x = -p.x;
+	if (p.y < 0)
+		p.y = -p.y;
+	if (p.x > p.y)
+		if (a.x <= b.x)
+			draw_line_pta(img, a, b, color);
 		else
-			while ((--a.x) != b.x)
-				put_pixel(img, a, color);
+			draw_line_pta(img, b, a, color);
 	else
-		if ((d.x = b.y - a.y) != 0)
-		{
-			if (d.y > 0)
-				while ((++a.y) != b.y)
-					put_pixel(img, a, color);
-			else
-				while ((--a.y) != b.y)
-					put_pixel(img, a, color);
-		}
+		if (a.y < b.y)
+			draw_line_ptb(img, a, b, color);
+		else
+			draw_line_ptb(img, b, a, color);
 }
