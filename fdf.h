@@ -6,7 +6,7 @@
 /*   By: ldubos <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/04 13:44:34 by ldubos            #+#    #+#             */
-/*   Updated: 2016/01/11 11:58:13 by ldubos           ###   ########.fr       */
+/*   Updated: 2016/01/11 14:16:54 by ldubos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,16 @@ typedef struct		s_vec3
 	int				y;
 	int				z;
 }					t_vec3;
+
+typedef struct		s_line
+{
+	t_img			**img;
+	t_vec2			a;
+	t_vec2			b;
+	t_vec2			d;
+	int				e;
+	int				color;
+}					t_line;
 
 void				draw_line(t_img *img, t_vec2 a, t_vec2 b, int color);
 float				ft_sqrt(float b);
