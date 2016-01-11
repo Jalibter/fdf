@@ -6,7 +6,7 @@
 /*   By: ldubos <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/04 13:44:34 by ldubos            #+#    #+#             */
-/*   Updated: 2016/01/11 14:16:54 by ldubos           ###   ########.fr       */
+/*   Updated: 2016/01/11 23:02:23 by ldubos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <stdio.h>
 # include <math.h>
 
-# include "libft/libft.h"
+# include "libft.h"
 # include "get_next_line.h"
 
 typedef struct		s_img
