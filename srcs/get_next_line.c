@@ -5,32 +5,33 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ldubos <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/01/11 07:44:34 by ldubos            #+#    #+#             */
-/*   Updated: 2016/01/11 07:44:42 by ldubos           ###   ########.fr       */
+/*   Created: 2016/01/18 15:53:38 by ldubos            #+#    #+#             */
+/*   Updated: 2016/01/18 16:08:36 by ldubos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "get_next_line.h"
 
 static int			get_line(char **storage, char **line, int ret)
 {
-	char			*tmp;
-	char			*off;
+	char			*tmp_a;
+	char			*tmp_b;
 
-	tmp = *storage;
-	off = ft_strchr(tmp, '\n');
-	if (off)
+	tmp_a = *storage;
+	tmp_b = ft_strchr(tmp_a, '\n');
+	if (tmp_b)
 	{
-		*line = ft_strsub(tmp, 0, off - tmp);
-		*storage = ft_strdup(off + 1);
-		free(tmp);
+		*line = ft_strsub(tmp_a, 0, tmp_b - tmp_a);
+		*storage = ft_strdup(tmp_b + 1);
+		free(tmp_a);
 	}
 	else
 	{
-		*line = ft_strdup(tmp);
+		*line = ft_strdup(tmp_a);
 		free(*storage);
 		*storage = NULL;
 	}
-	if ((!*line) || (off && !*storage))
+	if ((!*line) || (tmp_b && (!*storage)))
 		return (-1);
 	if (!ret && *storage)
 		return (1);
@@ -68,7 +69,7 @@ static int			get_storage(int fd, char **storage)
 
 int					get_next_line(int const fd, char **line)
 {
-	static char		*storage[512];
+	static char		*storage[256];
 	int				ret;
 
 	if (fd < 0 || !line)
@@ -81,14 +82,13 @@ int					get_next_line(int const fd, char **line)
 		ret = get_storage(fd, &storage[fd]);
 	if (ret > 1)
 		ret = 1;
-	if (ret == 0 && *storage[fd] == '\0')
+	if (!ret && *storage[fd] == '\0')
 	{
 		*line = NULL;
 		free(storage[fd]);
 		storage[fd] = NULL;
 	}
-	else if (ret > 0 || *storage[fd] != '\0')
+	else if (ret > 0 || *storage[fd])
 		ret = get_line(&storage[fd], line, ret);
 	return (ret);
 }
-

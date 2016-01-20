@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ldubos <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/01/09 16:36:25 by ldubos            #+#    #+#             */
-/*   Updated: 2016/01/11 14:34:51 by ldubos           ###   ########.fr       */
+/*   Created: 2016/01/20 14:56:59 by ldubos            #+#    #+#             */
+/*   Updated: 2016/01/20 15:05:14 by ldubos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void				put_pixel(t_img *img, t_vec2 p, int color)
+void				put_pixel(t_img *img, t_vector3 p, int color)
 {
 	char			*pixel;
 
@@ -25,9 +25,10 @@ void				put_pixel(t_img *img, t_vec2 p, int color)
 	}
 }
 
-void				draw_line_pta(t_img *img, t_vec2 a, t_vec2 b, int color)
+void				draw_line_pta(t_img *img, t_vector3 a, t_vector3 b,
+		int color)
 {
-	t_vec2			p;
+	t_vector3		p;
 
 	p.x = a.x;
 	while (p.x < b.x)
@@ -38,9 +39,10 @@ void				draw_line_pta(t_img *img, t_vec2 a, t_vec2 b, int color)
 	}
 }
 
-void				draw_line_ptb(t_img *img, t_vec2 a, t_vec2 b, int color)
+void				draw_line_ptb(t_img *img, t_vector3 a, t_vector3 b,
+		int color)
 {
-	t_vec2			p;
+	t_vector3		p;
 
 	p.y = a.y;
 	while (p.y < b.y)
@@ -52,9 +54,9 @@ void				draw_line_ptb(t_img *img, t_vec2 a, t_vec2 b, int color)
 
 }
 
-void				draw_line(t_img *img, t_vec2 a, t_vec2 b, int color)
+void				draw_line(t_img *img, t_vector3 a, t_vector3 b, int color)
 {
-	t_vec2			p;
+	t_vector3		p;
 
 	p.x = a.x - b.x;
 	p.y = a.y - b.y;

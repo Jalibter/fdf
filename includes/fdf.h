@@ -1,27 +1,15 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   fdf.h                                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ldubos <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/01/04 13:44:34 by ldubos            #+#    #+#             */
-/*   Updated: 2016/01/11 23:02:23 by ldubos           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef FDF_H
 # define FDF_H
 
-# include <fcntl.h>
-# include <unistd.h>
 # include <mlx.h>
+# include <unistd.h>
+# include <fcntl.h>
 # include <stdlib.h>
-# include <stdio.h>
 # include <math.h>
 
 # include "libft.h"
 # include "get_next_line.h"
+# include "key_list.h"
 
 typedef struct		s_img
 {
@@ -31,42 +19,58 @@ typedef struct		s_img
 	int				size_line;
 	int				endian;
 	int				width;
-	int 			height;
+	int				height;
 }					t_img;
 
 typedef struct		s_env
 {
-	void 			*mlx;
+	void			*mlx;
 	void			*win;
-	int				height;
 	int				width;
+	int				height;
 	t_img			img;
 }					t_env;
 
-typedef struct		s_vec2
-{
-	int				x;
-	int				y;
-}					t_vec2;
-
-typedef struct		s_vec3
+typedef struct		s_vector3
 {
 	int				x;
 	int				y;
 	int				z;
-}					t_vec3;
+}					t_vector3;
 
-typedef struct		s_line
+typedef struct		s_vrtce
 {
-	t_img			**img;
-	t_vec2			a;
-	t_vec2			b;
-	t_vec2			d;
-	int				e;
-	int				color;
-}					t_line;
+	t_vector3		vertex;
+	struct s_vrtce	*next;
+	struct s_vrtce	*prev;
+}					t_vrtce;
 
-void				draw_line(t_img *img, t_vec2 a, t_vec2 b, int color);
-float				ft_sqrt(float b);
+/*
+** fdf_error.c
+*/
+
+void				arg_error(void);
+void				malloc_error(void);
+void				open_error(char *file);
+void				map_error(void);
+
+/*
+** vertices.c
+*/
+
+t_vrtce				*new_vertices(void);
+
+/*
+** map.c
+*/
+
+t_vrtce				*read_map(char *file);
+
+/*
+** draw.c
+*/
+
+void				put_pixel(t_img *img, t_vector3 p, int color);
+void				draw_line(t_img *img, t_vector3 a, t_vector3 b, int color);
 
 #endif

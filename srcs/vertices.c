@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   vertices.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ldubos <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/01/18 15:56:29 by ldubos            #+#    #+#             */
-/*   Updated: 2016/01/20 10:42:28 by ldubos           ###   ########.fr       */
+/*   Created: 2016/01/20 13:56:53 by ldubos            #+#    #+#             */
+/*   Updated: 2016/01/20 14:48:45 by ldubos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "fdf.h"
 
-# include <stdlib.h>
-# include <unistd.h>
-# include <fcntl.h>
-# include "libft.h"
+t_vrtce				*new_vertices(void)
+{
+	t_vrtce			*vertices;
 
-# define BUFF_SIZE 32
-
-int					get_next_line(int const fd, char **line);
-
-#endif
+	if (!(vertices = (t_vrtce *)malloc(sizeof(t_vrtce *))))
+		malloc_error();
+	vertices->vertex = (t_vector3){.x = 0, .y = 0, .z = 0};
+	return (vertices);
+}

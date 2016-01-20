@@ -5,19 +5,19 @@
 #                                                     +:+ +:+         +:+      #
 #    By: ldubos <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2016/01/08 13:45:18 by ldubos            #+#    #+#              #
-#    Updated: 2016/01/11 23:12:14 by ldubos           ###   ########.fr        #
+#    Created: 2016/01/20 10:21:26 by ldubos            #+#    #+#              #
+#    Updated: 2016/01/20 15:24:57 by ldubos           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-export CC=gcc
 export CFLAGS=-Wall -Wextra -Werror
 NAME=fdf
 SRCS_DIR=srcs/
 SRCS=$(SRCS_DIR)main.c \
 	 $(SRCS_DIR)get_next_line.c \
+	 $(SRCS_DIR)fdf_error.c \
 	 $(SRCS_DIR)map.c \
-	 $(SRCS_DIR)draw.c
+	 $(SRCS_DIR)vertices.c
 OBJS=$(SRCS:.c=.o)
 	INC_DIR=-I./includes/ -I./libft/includes/
 	LIB_DIR=-L./libft -lft -L./minilibx -lmlx -framework OpenGL -framework AppKit
@@ -25,24 +25,27 @@ OBJS=$(SRCS:.c=.o)
 
 all		: $(NAME)
 
-$(NAME)	: $(OBJS)
+$(NAME) : $(OBJS)
 	@cd $(LIB_MAKE) && $(MAKE)
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIB_DIR) $(LFLAGS)
-	@echo "\033[36m\033[33mmake fdf is done !\033[0m";
+	@printf "\033[1;33m[FdF all]\t\t\033[1;32m.\033[0;02m";
+	@gcc $(CFLAGS) $(OBJS) -o $(NAME) $(LIB_DIR) $(LFLAGS)
+	@printf "\033[1;32m.\t\t[OK]\033[0;02m\n";
 
 %.o		: %.c
-	@$(CC) $(CFLAGS) $(INC_DIR) -c $< -o $@
+	@gcc $(CFLAGS) $(INC_DIR) -c $< -o $@
 
 .PHONY	: clean fclean re
 
 clean	:
 	@cd $(LIB_MAKE) && $(MAKE) $@
+	@printf "\033[1;33m[FdF clean]\t\t\033[1;32m.\033[0;02m";
 	@rm -f $(OBJS)
-	@echo "\033[36m\033[33mclean fdf is done !\033[0m";
+	@printf "\033[1;32m.\t\t[OK]\033[0;02m\n";
 
-fclean	: clean
+fclean	:
 	@cd $(LIB_MAKE) && $(MAKE) $@
+	@printf "\033[1;33m[FdF fclean]\t\t\033[1;32m.\033[0;02m";
 	@rm -f $(NAME)
-	@echo "\033[36m\033[33mfclean fdf is done !\033[0m";
+	@printf "\033[1;32m.\t\t[OK]\033[0;02m\n";
 
 re		: fclean all
