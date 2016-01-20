@@ -6,17 +6,11 @@
 /*   By: ldubos <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/20 14:34:01 by ldubos            #+#    #+#             */
-/*   Updated: 2016/01/20 15:16:31 by ldubos           ###   ########.fr       */
+/*   Updated: 2016/01/20 15:43:47 by ldubos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-
-int					expose_hook(t_env *e)
-{
-	mlx_put_image_to_window(e->mlx, e->win, e->img.img, 0, 0);
-	return (1);
-}
 
 int					main(int argc, char **argv)
 {
@@ -35,6 +29,7 @@ int					main(int argc, char **argv)
 	e.win = mlx_new_window(e.mlx, e.width, e.height, ft_strjoin("FdF 42 | ",
 				argv[1]));
 	mlx_expose_hook(e.win, expose_hook, &e);
+	mlx_key_hook(e.win, key_hook, &e);
 	mlx_loop(e.mlx);
 	return (0);
 }

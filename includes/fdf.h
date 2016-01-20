@@ -73,4 +73,11 @@ t_vrtce				*read_map(char *file);
 void				put_pixel(t_img *img, t_vector3 p, int color);
 void				draw_line(t_img *img, t_vector3 a, t_vector3 b, int color);
 
+/*
+** hook_event.c
+*/
+
+int					expose_hook(t_env *e);
+int					key_hook(int keycode, t_env *e);
+
 #endif

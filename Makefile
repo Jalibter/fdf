@@ -6,7 +6,7 @@
 #    By: ldubos <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/01/20 10:21:26 by ldubos            #+#    #+#              #
-#    Updated: 2016/01/20 15:24:57 by ldubos           ###   ########.fr        #
+#    Updated: 2016/01/20 15:44:43 by ldubos           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ SRCS=$(SRCS_DIR)main.c \
 	 $(SRCS_DIR)get_next_line.c \
 	 $(SRCS_DIR)fdf_error.c \
 	 $(SRCS_DIR)map.c \
-	 $(SRCS_DIR)vertices.c
+	 $(SRCS_DIR)vertices.c \
+	 $(SRCS_DIR)hook_event.c
 OBJS=$(SRCS:.c=.o)
 	INC_DIR=-I./includes/ -I./libft/includes/
 	LIB_DIR=-L./libft -lft -L./minilibx -lmlx -framework OpenGL -framework AppKit
