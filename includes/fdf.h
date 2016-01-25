@@ -28,6 +28,8 @@ typedef struct		s_env
 	void			*win;
 	int				width;
 	int				height;
+	int				max_x;
+	int				max_y;
 	t_img			img;
 }					t_env;
 
@@ -42,8 +44,14 @@ typedef struct		s_vrtce
 {
 	t_vector3		vertex;
 	struct s_vrtce	*next;
-	struct s_vrtce	*prev;
 }					t_vrtce;
+
+typedef struct		s_map
+{
+	t_vector3		**map;
+	int				m_x;
+	int				m_y;
+}					t_map;
 
 /*
 ** fdf_error.c
@@ -55,16 +63,11 @@ void				open_error(char *file);
 void				map_error(void);
 
 /*
-** vertices.c
-*/
-
-t_vrtce				*new_vertices(void);
-
-/*
 ** map.c
 */
 
-t_vrtce				*read_map(char *file);
+t_vrtce				*read_map(int fd);
+t_vrtce				*vertices_to_2d(t_vrtce *vertices, t_env *e);
 
 /*
 ** draw.c
@@ -72,6 +75,7 @@ t_vrtce				*read_map(char *file);
 
 void				put_pixel(t_img *img, t_vector3 p, int color);
 void				draw_line(t_img *img, t_vector3 a, t_vector3 b, int color);
+void				draw_map(t_env *e, t_vrtce *map, int color);
 
 /*
 ** hook_event.c
