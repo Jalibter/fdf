@@ -12,16 +12,22 @@
 
 #include "fdf.h"
 
-int					expose_hook(t_env *e)
+int					key_hook(int kc, t_params *params)
 {
-	mlx_put_image_to_window(e->mlx, e->win, e->img.img, 0, 0);
-	return (1);
+	if (kc == 53)
+		exit(0);
+	return (0);
 }
 
-int					key_hook(int keycode, t_env *e)
+int					loop_hook(t_params *params)
 {
-	if (keycode == KC_ESC)
-		exit (0);
-	mlx_put_image_to_window(e->mlx, e->win, e->img.img, 0, 0);
-	return (1);
+	if (params->redraw)
+	{
+		ft_bzero(params->img.data, WIDTH * HEIGHT * 4);
+		// Draw map
+		mlx_put_image_to_window(params->env.mlx, params->env.win,
+								params->img.img.img, 0, 0);
+		params->redraw = 0;
+	}
+	return (0);
 }

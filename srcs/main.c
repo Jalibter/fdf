@@ -6,37 +6,39 @@
 /*   By: ldubos <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/20 14:34:01 by ldubos            #+#    #+#             */
-/*   Updated: 2016/01/25 13:14:32 by ldubos           ###   ########.fr       */
+/*   Updated: 2016/01/29 15:17:47 by ldubos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "fdf.h"
+
+void				init_params(t_params *params)
+{
+	params->zoom = 10;
+	params->alt = 1;
+	params->offset.x = WIDTH / 16;
+	params->offset.y = HEIGHT / 9;
+}
 
 int					main(int argc, char **argv)
 {
-	t_vrtce			*vertices;
-	t_env			e;
 	int				fd;
+	t_params		params;
 
-	if (argc != 2)
+	if (argc < 2)
 		arg_error();
 	if ((fd = open(argv[1], O_RDONLY)) == -1)
-		open_error(argv[1]);
-	vertices = read_map(fd);
-	close (fd);
-	e.mlx = mlx_init();
-	e.width = e.img.width = 1920;
-	e.height = e.img.height = 1080;
-	e.img.img = mlx_new_image(e.mlx, e.width, e.height);
-	e.img.data = mlx_get_data_addr(e.img.img, &e.img.bpp, &e.img.size_line,
-			&e.img.endian);
-	e.win = mlx_new_window(e.mlx, e.width, e.height, ft_strjoin("FdF 42 | ",
-				argv[1]));
-	t_vrtce *map_2d =  vertices_to_2d(vertices, &e);
-	draw_map(&e, map_2d, 0xFF0000);
-	mlx_expose_hook(e.win, expose_hook, &e);
-	mlx_key_hook(e.win, key_hook, &e);
-	mlx_loop(e.mlx);
+		file_error();
+	read_map(&params, fd);
+	params->env.mlx = mlx_init();
+	params->env.win = mlx_new_window(params->env.mlx, WIDTH, HEIGHT,
+						ft_strjoin("FdF @42 | ", argv[1]));
+	init_params(&params);
+	params.img.img = mlx_new_image(params.env.mlx, WIDTH, HEIGHT);
+	params.img.data = mlx_get_data_addr(params.img.img, &params.img.bpp,
+						&params.img.size_line, &params.img.endian);
+	mlx_key_hook(&params.env.win, key_hook, params);
+	ml_loop_hook();
+	mlx_loop(params.env.mlx);
 	return (0);
 }

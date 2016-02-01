@@ -6,48 +6,39 @@
 /*   By: ldubos <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/20 11:03:32 by ldubos            #+#    #+#             */
-/*   Updated: 2016/01/25 13:49:54 by ldubos           ###   ########.fr       */
+/*   Updated: 2016/01/29 15:18:38 by ldubos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <fdf.h>
+#include "fdf.h"
 
-t_vrtce				*read_map(int fd)
+t_map				*read_map(int fd)
 {
-	t_vrtce			*vertices;
-	t_vrtce			*ret;
-	t_vector3		pos;
+	t_map			*map;
+	t_map			*ret;
+	t_point			pos;
 	char			*line;
 	char			**line_split;
 
-	if (!(vertices = (t_vrtce *)malloc(sizeof(t_vrtce))))
+	if (!(map = (t_map *)malloc(sizeof(t_map))))
 		malloc_error();
-	ret = vertices;
-	pos = (t_vector3){.x = 0, .y = 0, .z = 0};
+	pos = (t_point){0, 0, 0};
 	while (get_next_line(fd, &line) > 0)
 	{
 		line = ft_strjoin(line, " ");
 		line_split = ft_strsplit(line, ' ');
+		pos.x = 0;
 		while (line_split[pos.x] != 0)
 		{
-			vertices->vertex = (t_vector3){.x = pos.x,
-				.y = pos.z, .z = ft_atoi(line_split[pos.x])};
-			++pos.x;
-			if (!(vertices->next = (t_vrtce *)malloc(sizeof(t_vrtce))))
+			map->pos.x = pos.x - ft_atoi(line_split[pos.x]);
+			map->pos.y = pos.y - (pos.x + ft_atoi(line_split[pos.x]));
+			if (!(map->next = (t_map *)malloc(sizeof(t_map))))
 				malloc_error();
-			vertices = vertices->next;
+			map = map->next;
+			++pos.x;
 		}
-		pos.x = 0;
-		++pos.z;
+		++pos.y;
 	}
+	map->next = NULL;
 	return (ret);
-}
-
-t_map				vertices_to_2d(t_vrtce *vertices, t_env *e)
-{
-	t_vrtce			map;
-
-	if (!(map = (t_map)sizeof(t_map)))
-		malloc_error();
-	return (map);
 }

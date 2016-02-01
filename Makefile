@@ -6,11 +6,11 @@
 #    By: ldubos <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/01/20 10:21:26 by ldubos            #+#    #+#              #
-#    Updated: 2016/01/25 11:56:35 by ldubos           ###   ########.fr        #
+#    Updated: 2016/01/29 15:17:10 by ldubos           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-export CFLAGS=-Wall -Wextra -Werror
+export CFLAGS=#-Wall -Wextra -Werror
 NAME=fdf
 SRCS_DIR=srcs/
 SRCS=$(SRCS_DIR)main.c \

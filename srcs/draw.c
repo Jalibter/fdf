@@ -6,13 +6,14 @@
 /*   By: ldubos <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/20 14:56:59 by ldubos            #+#    #+#             */
-/*   Updated: 2016/01/25 13:36:03 by ldubos           ###   ########.fr       */
+/*   Updated: 2016/01/29 15:15:47 by ldubos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+#include <stdio.h>
 
-void				put_pixel(t_img *img, t_vector3 p, int color)
+void				put_pixel(t_img *img, t_v2 p, int color)
 {
 	char			*pixel;
 
@@ -25,10 +26,10 @@ void				put_pixel(t_img *img, t_vector3 p, int color)
 	}
 }
 
-void				draw_line_pta(t_img *img, t_vector3 a, t_vector3 b,
+void				draw_line_pta(t_img *img, t_v2 a, t_v2 b,
 		int color)
 {
-	t_vector3		p;
+	t_v2			p;
 
 	p.x = a.x;
 	while (p.x < b.x)
@@ -39,10 +40,10 @@ void				draw_line_pta(t_img *img, t_vector3 a, t_vector3 b,
 	}
 }
 
-void				draw_line_ptb(t_img *img, t_vector3 a, t_vector3 b,
+void				draw_line_ptb(t_img *img, t_v2 a, t_v2 b,
 		int color)
 {
-	t_vector3		p;
+	t_v2			p;
 
 	p.y = a.y;
 	while (p.y < b.y)
@@ -54,14 +55,14 @@ void				draw_line_ptb(t_img *img, t_vector3 a, t_vector3 b,
 
 }
 
-void				draw_line(t_img *img, t_vector3 a, t_vector3 b, int color)
+void				draw_line(t_img *img, t_v2 a, t_v2 b, int color)
 {
-	t_vector3		p;
+	t_v2			p;
 
-	a.x = a.x * 30 + img->width / 4;
+/*	a.x = a.x * 30 + img->width / 4;
 	a.y = a.y * 30 + img->height / 4;
 	b.x = b.x * 30 + img->width / 4;
-	b.y = b.y * 30 + img->height / 4;
+	b.y = b.y * 30 + img->height / 4;*/
 	p.x = a.x - b.x;
 	p.y = a.y - b.y;
 	if (p.x < 0)
@@ -78,14 +79,4 @@ void				draw_line(t_img *img, t_vector3 a, t_vector3 b, int color)
 			draw_line_ptb(img, a, b, color);
 		else
 			draw_line_ptb(img, b, a, color);
-}
-
-void				draw_map(t_env *e, t_vrtce *map, int color)
-{
-	while (map != NULL)
-	{
-		if (map->next != NULL)
-			draw_line(&e->img, map->vertex, map->next->vertex, color);
-		map = map->next;
-	}
 }

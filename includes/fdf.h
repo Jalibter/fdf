@@ -11,77 +11,93 @@
 # include "get_next_line.h"
 # include "key_list.h"
 
-typedef struct		s_img
-{
-	void			*img;
-	char			*data;
-	int				bpp;
-	int				size_line;
-	int				endian;
-	int				width;
-	int				height;
-}					t_img;
-
-typedef struct		s_env
-{
-	void			*mlx;
-	void			*win;
-	int				width;
-	int				height;
-	int				max_x;
-	int				max_y;
-	t_img			img;
-}					t_env;
-
-typedef struct		s_vector3
-{
-	int				x;
-	int				y;
-	int				z;
-}					t_vector3;
-
-typedef struct		s_vrtce
-{
-	t_vector3		vertex;
-	struct s_vrtce	*next;
-}					t_vrtce;
-
-typedef struct		s_map
-{
-	t_vector3		**map;
-	int				m_x;
-	int				m_y;
-}					t_map;
-
 /*
-** fdf_error.c
+** Window define
 */
 
-void				arg_error(void);
-void				malloc_error(void);
-void				open_error(char *file);
-void				map_error(void);
+# define WIDTH 1920
+# define HEIGHT 1080
+
+/*
+** Data types
+*/
+
+typedef struct	s_v2
+{
+	int			x;
+	int			y;
+}				t_v2;
+
+typedef struct	s_v3
+{
+	int			x;
+	int			y;
+	int			z;
+}				t_v3;
+
+typedef struct	s_map
+{
+	t_v3		**vertices;
+	t_v3		max;
+}				t_map;
+
+/*
+** Window data
+*/
+
+typedef struct	s_img
+{
+	void		*img;
+	char		*data;
+	int			bpp;
+	int			size_line;
+	int			endian;
+}				t_img;
+
+typedef struct	s_env
+{
+	void		*mlx;
+	void		*win;
+}				t_env;
+
+typedef struct	s_params
+{
+	t_env		env;
+	t_map		map;
+	t_img		img;
+	int			alt;
+	int			zoom;
+	int			redraw;
+	t_v2		offset;
+	float		adj;
+}				t_params;
+
+/*
+** hooks.c
+*/
+
+int					key_hook(int kc, t_params *params);
+
+/*
+** error.c
+*/
+
+void				arg_error();
+void				malloc_error();
+void				file_error(char *file);
+void				read_error();
+void				map_error();
 
 /*
 ** map.c
 */
 
-t_vrtce				*read_map(int fd);
-t_vrtce				*vertices_to_2d(t_vrtce *vertices, t_env *e);
+void				read_map(t_params *params, int fd);
 
 /*
 ** draw.c
 */
 
-void				put_pixel(t_img *img, t_vector3 p, int color);
-void				draw_line(t_img *img, t_vector3 a, t_vector3 b, int color);
-void				draw_map(t_env *e, t_vrtce *map, int color);
-
-/*
-** hook_event.c
-*/
-
-int					expose_hook(t_env *e);
-int					key_hook(int keycode, t_env *e);
+void				draw_line(t_img *img, t_v2 a, t_v2 b, int color);
 
 #endif
