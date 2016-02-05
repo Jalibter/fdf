@@ -1,33 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hook_event.c                                       :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ldubos <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/01/20 15:37:17 by ldubos            #+#    #+#             */
-/*   Updated: 2016/01/20 15:46:40 by ldubos           ###   ########.fr       */
+/*   Created: 2016/01/20 13:32:13 by ldubos            #+#    #+#             */
+/*   Updated: 2016/01/20 18:17:53 by ldubos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int					key_hook(int kc, t_params *params)
+void				arg_error(int argc)
 {
-	if (kc == 53)
-		exit(0);
-	return (0);
+	if (argc < 2)
+	{
+		ft_putendl_fd("\a\033[1;31;40mToo few arguments.\033[0m", 2);
+		exit(1);
+	}
 }
 
-int					loop_hook(t_params *params)
+void				open_error()
 {
-	if (params->redraw)
+	ft_putendl_fd("\a\033[1;31;40mOpen file error.\033[0m", 2);
+	exit(1);
+}
+
+void				gnl_error(int err)
+{
+	if (err < 0)
 	{
-		ft_bzero(params->img.data, WIDTH * HEIGHT * 4);
-		// Draw map
-		mlx_put_image_to_window(params->env.mlx, params->env.win,
-								params->img.img.img, 0, 0);
-		params->redraw = 0;
+		ft_putendl_fd("\a\033[1;31;40mRead file error.\033[0m", 2);
+		exit(1);
 	}
-	return (0);
+}
+
+void				malloc_error()
+{
+	ft_putendl_fd("\a\033[1;31;40mMemory error.\033[0m", 2);
+	exit(1);
 }

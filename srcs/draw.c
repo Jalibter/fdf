@@ -13,11 +13,11 @@
 #include "fdf.h"
 #include <stdio.h>
 
-void				put_pixel(t_img *img, t_v2 p, int color)
+void				put_pixel(t_img *img, t_vec p, int color)
 {
 	char			*pixel;
 
-	if ((p.x < img->width && p.x < img->height) && (p.x >= 0 && p.y >= 0))
+	if ((p.x < WIDTH && p.x < HEIGHT) && (p.x >= 0 && p.y >= 0))
 	{
 		pixel = img->data + p.y * img->size_line + (img->bpp / 8) * p.x;
 		pixel[2] = (char)(color >> 16);
@@ -26,10 +26,10 @@ void				put_pixel(t_img *img, t_v2 p, int color)
 	}
 }
 
-void				draw_line_pta(t_img *img, t_v2 a, t_v2 b,
+void				draw_line_pta(t_img *img, t_vec a, t_vec b,
 		int color)
 {
-	t_v2			p;
+	t_vec			p;
 
 	p.x = a.x;
 	while (p.x < b.x)
@@ -40,10 +40,10 @@ void				draw_line_pta(t_img *img, t_v2 a, t_v2 b,
 	}
 }
 
-void				draw_line_ptb(t_img *img, t_v2 a, t_v2 b,
+void				draw_line_ptb(t_img *img, t_vec a, t_vec b,
 		int color)
 {
-	t_v2			p;
+	t_vec			p;
 
 	p.y = a.y;
 	while (p.y < b.y)
@@ -55,14 +55,15 @@ void				draw_line_ptb(t_img *img, t_v2 a, t_v2 b,
 
 }
 
-void				draw_line(t_img *img, t_v2 a, t_v2 b, int color)
+void				draw_line(t_img *img, t_vec a, t_vec b, int color)
 {
-	t_v2			p;
+	t_vec			p;
 
-/*	a.x = a.x * 30 + img->width / 4;
-	a.y = a.y * 30 + img->height / 4;
-	b.x = b.x * 30 + img->width / 4;
-	b.y = b.y * 30 + img->height / 4;*/
+	a.x = a.x * 30 + 300;
+	a.y = a.y * 30 + 300;
+	b.x = b.x * 30 + 300;
+	b.y = b.y * 30 + 300;
+
 	p.x = a.x - b.x;
 	p.y = a.y - b.y;
 	if (p.x < 0)
@@ -79,4 +80,26 @@ void				draw_line(t_img *img, t_v2 a, t_v2 b, int color)
 			draw_line_ptb(img, a, b, color);
 		else
 			draw_line_ptb(img, b, a, color);
+}
+
+void				draw_map(t_params *params)
+{
+	int				x;
+	int				y;
+	int				color;
+
+	y = 0;
+	while (y < params->map.max.y - 1)
+	{
+		x = 0;
+		while (x < params->map.max.x - 1)
+		{
+			draw_line(&params->img, params->map.map[y][x],
+				params->map.map[y][x + 1], 0xFF5588);
+			draw_line(&params->img, params->map.map[y][x],
+				params->map.map[y + 1][x], 0xFF21AA);
+			++x;
+		}
+		++y;
+	}
 }

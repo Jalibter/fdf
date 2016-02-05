@@ -6,98 +6,81 @@
 # include <fcntl.h>
 # include <stdlib.h>
 # include <math.h>
+# include <X11/x.h>
 
 # include "libft.h"
 # include "get_next_line.h"
-# include "key_list.h"
-
-/*
-** Window define
-*/
 
 # define WIDTH 1920
 # define HEIGHT 1080
 
-/*
-** Data types
-*/
-
-typedef struct	s_v2
+typedef struct		s_env
 {
-	int			x;
-	int			y;
-}				t_v2;
+	void			*mlx;
+	void			*win;
+}					t_env;
 
-typedef struct	s_v3
+typedef struct		s_img
 {
-	int			x;
-	int			y;
-	int			z;
-}				t_v3;
+	void			*img;
+	char			*data;
+	int				bpp;
+	int				size_line;
+	int				endian;
+}					t_img;
 
-typedef struct	s_map
+typedef struct		s_vec
 {
-	t_v3		**vertices;
-	t_v3		max;
-}				t_map;
+	int				x;
+	int				y;
+	int				z;
+}					t_vec;
 
-/*
-** Window data
-*/
-
-typedef struct	s_img
+typedef struct		s_map
 {
-	void		*img;
-	char		*data;
-	int			bpp;
-	int			size_line;
-	int			endian;
-}				t_img;
+	t_vec			**map;
+	t_vec			max;
+}					t_map;
 
-typedef struct	s_env
+typedef struct		s_params
 {
-	void		*mlx;
-	void		*win;
-}				t_env;
-
-typedef struct	s_params
-{
-	t_env		env;
-	t_map		map;
-	t_img		img;
-	int			alt;
-	int			zoom;
-	int			redraw;
-	t_v2		offset;
-	float		adj;
-}				t_params;
-
-/*
-** hooks.c
-*/
-
-int					key_hook(int kc, t_params *params);
+	t_env			e;
+	t_img			img;
+	t_map			map;
+	t_vec			offset;
+	int				alt;
+	int				zoom;
+	int				redraw;
+}					t_params;
 
 /*
 ** error.c
 */
 
-void				arg_error();
+void				arg_error(int argc);
+void				open_error();
+void				gnl_error(int err);
 void				malloc_error();
-void				file_error(char *file);
-void				read_error();
-void				map_error();
 
 /*
 ** map.c
 */
 
-void				read_map(t_params *params, int fd);
+void				read_map(t_params *params, char *file);
+void				get_2d_map(t_params *params);
+
+/*
+** hook.h
+*/
+
+int					key_hook(int keycode, t_params *params);
+int					loop_hook(t_params *params);
 
 /*
 ** draw.c
 */
 
-void				draw_line(t_img *img, t_v2 a, t_v2 b, int color);
+void				draw_line(t_img *img, t_vec a, t_vec b, int color);
+void				draw_map(t_params *params);
 
 #endif

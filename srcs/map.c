@@ -6,39 +6,86 @@
 /*   By: ldubos <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/20 11:03:32 by ldubos            #+#    #+#             */
-/*   Updated: 2016/01/29 15:18:38 by ldubos           ###   ########.fr       */
+/*   Updated: 2016/02/01 12:11:29 by ldubos           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-t_map				*read_map(int fd)
+void				fill_map(t_params *params, t_list *lst)
 {
-	t_map			*map;
-	t_map			*ret;
-	t_point			pos;
-	char			*line;
-	char			**line_split;
+	t_vec			index;
+	t_vec			tmp;
 
-	if (!(map = (t_map *)malloc(sizeof(t_map))))
+	index = (t_vec){.x = 0, .y = 0, .z = 0};
+	if (!(params->map.map = (t_vec **)malloc(sizeof(t_vec*) *
+	params->map.max.y)))
 		malloc_error();
-	pos = (t_point){0, 0, 0};
-	while (get_next_line(fd, &line) > 0)
+	while (index.y < params->map.max.y)
 	{
-		line = ft_strjoin(line, " ");
-		line_split = ft_strsplit(line, ' ');
-		pos.x = 0;
-		while (line_split[pos.x] != 0)
-		{
-			map->pos.x = pos.x - ft_atoi(line_split[pos.x]);
-			map->pos.y = pos.y - (pos.x + ft_atoi(line_split[pos.x]));
-			if (!(map->next = (t_map *)malloc(sizeof(t_map))))
-				malloc_error();
-			map = map->next;
-			++pos.x;
-		}
-		++pos.y;
+		if (!(params->map.map[index.y] =
+			(t_vec *)malloc(sizeof(t_vec) * params->map.max.x)))
+			malloc_error();
+		++index.y;
 	}
-	map->next = NULL;
-	return (ret);
+	while (lst)
+	{
+		tmp = *((t_vec *)lst->content);
+		params->map.map[tmp.y][tmp.x] = tmp;
+		lst = lst->next;
+	}
+}
+
+void				read_map(t_params *params, char *path)
+{
+	t_vec			file;
+	t_list			*tmp;
+	char			*line;
+	char			**tmp_x;
+
+	tmp = NULL;
+	file.x = open(path, O_RDONLY);
+	params->map.max.y = 0;
+	while ((file.y = get_next_line(file.x, &line)) > 0)
+	{
+		gnl_error(file.y);
+		tmp_x = ft_strsplit(line, ' ');
+		params->map.max.x = 0;
+		while (tmp_x[params->map.max.x])
+		{
+			params->map.max.z = -ft_atoi(tmp_x[params->map.max.x]);
+			ft_lstadd(&tmp, ft_lstnew(&params->map.max, sizeof(t_vec)));
+			++params->map.max.x;
+		}
+		++params->map.max.y;
+	}
+	fill_map(params, tmp);
+	close(file.x);
+}
+
+void				get_2d_map(t_params *params)
+{
+	t_vec			**map;
+	t_vec			index;
+
+	if (!(map = (t_vec **)malloc(sizeof(t_vec *))))
+		malloc_error();
+	while (index.y < params->map.max.y)
+	{
+		if (!(map[index.y] =
+			(t_vec *)malloc(sizeof(t_vec) * params->map.max.x)))
+			malloc_error();
+		index.x = 0;
+		while (index.x < params->map.max.x)
+		{
+			map[index.y][index.x].x = params->map.map[index.y][index.x].x -
+			params->map.map[index.y][index.x].y;
+			map[index.y][index.x].y = (params->map.map[index.y][index.x].x)
+			+ (params->map.map[index.y][index.x].y) +
+			(params->map.map[index.y][index.x].z);
+			++index.x;
+		}
+		++index.y;
+	}
+	params->map.map = map;
 }

@@ -11,34 +11,36 @@
 /* ************************************************************************** */
 
 #include "fdf.h"
+#include <stdio.h>
 
 void				init_params(t_params *params)
 {
 	params->zoom = 10;
 	params->alt = 1;
-	params->offset.x = WIDTH / 16;
-	params->offset.y = HEIGHT / 9;
+	params->offset.x = 0;
+	params->offset.y = 0;
+	params->redraw = 1;
 }
 
 int					main(int argc, char **argv)
 {
-	int				fd;
 	t_params		params;
 
-	if (argc < 2)
-		arg_error();
-	if ((fd = open(argv[1], O_RDONLY)) == -1)
-		file_error();
-	read_map(&params, fd);
-	params->env.mlx = mlx_init();
-	params->env.win = mlx_new_window(params->env.mlx, WIDTH, HEIGHT,
-						ft_strjoin("FdF @42 | ", argv[1]));
+	arg_error(argc);
 	init_params(&params);
-	params.img.img = mlx_new_image(params.env.mlx, WIDTH, HEIGHT);
+	params.e.mlx = mlx_init();
+	params.e.win = mlx_new_window(params.e.mlx, WIDTH, HEIGHT, "FdF @42");
+	params.img.img = mlx_new_image(params.e.mlx, WIDTH, HEIGHT);
 	params.img.data = mlx_get_data_addr(params.img.img, &params.img.bpp,
 						&params.img.size_line, &params.img.endian);
-	mlx_key_hook(&params.env.win, key_hook, params);
-	ml_loop_hook();
-	mlx_loop(params.env.mlx);
+	read_map(&params, argv[1]);
+	get_2d_map(&params);
+	draw_map(&params);
+	mlx_put_image_to_window(params.e.mlx, params.e.win, params.img.img,
+		params.offset.x, params.offset.y);
+//	mlx_key_hook(params.e.win, key_hook, &params);
+	mlx_loop_hook(params.e.mlx, loop_hook, &params);
+	mlx_hook(params.e.win, KeyPress, KeyPressMask, key_hook, &params);
+	mlx_loop(params.e.mlx);
 	return (0);
 }

@@ -6,7 +6,7 @@
 #    By: ldubos <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/01/20 10:21:26 by ldubos            #+#    #+#              #
-#    Updated: 2016/01/29 15:17:10 by ldubos           ###   ########.fr        #
+#    Updated: 2016/02/01 11:18:45 by ldubos           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,13 +15,13 @@ NAME=fdf
 SRCS_DIR=srcs/
 SRCS=$(SRCS_DIR)main.c \
 	 $(SRCS_DIR)get_next_line.c \
-	 $(SRCS_DIR)fdf_error.c \
+	 $(SRCS_DIR)error.c \
 	 $(SRCS_DIR)map.c \
-	 $(SRCS_DIR)hook_event.c \
+	 $(SRCS_DIR)hook.c \
 	 $(SRCS_DIR)draw.c
 OBJS=$(SRCS:.c=.o)
 	INC_DIR=-I./includes/ -I./libft/includes/
-	LIB_DIR=-L./libft -lft -L./minilibx -lmlx -framework OpenGL -framework AppKit
+	LIB_DIR=-L./libft -lft -L./minilibx -lmlx -framework OpenGL -framework AppKit -L/usr/includes/X11 -lX11
 	LIB_MAKE=libft/
 
 all		: $(NAME)
