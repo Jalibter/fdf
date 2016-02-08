@@ -18,7 +18,7 @@ void				fill_map(t_params *params, t_list *lst)
 	t_vec			tmp;
 
 	index = (t_vec){.x = 0, .y = 0, .z = 0};
-	if (!(params->map.map = (t_vec **)malloc(sizeof(t_vec*) *
+	if (!(params->map.map = (t_vec **)malloc(sizeof(t_vec *) *
 	params->map.max.y)))
 		malloc_error();
 	while (index.y < params->map.max.y)
@@ -63,29 +63,11 @@ void				read_map(t_params *params, char *path)
 	close(file.x);
 }
 
-void				get_2d_map(t_params *params)
+t_vec				get_2d_map(t_vec map)
 {
-	t_vec			**map;
-	t_vec			index;
+	t_vec			ret;
 
-	if (!(map = (t_vec **)malloc(sizeof(t_vec *))))
-		malloc_error();
-	while (index.y < params->map.max.y)
-	{
-		if (!(map[index.y] =
-			(t_vec *)malloc(sizeof(t_vec) * params->map.max.x)))
-			malloc_error();
-		index.x = 0;
-		while (index.x < params->map.max.x)
-		{
-			map[index.y][index.x].x = params->map.map[index.y][index.x].x -
-			params->map.map[index.y][index.x].y;
-			map[index.y][index.x].y = (params->map.map[index.y][index.x].x)
-			+ (params->map.map[index.y][index.x].y) +
-			(params->map.map[index.y][index.x].z);
-			++index.x;
-		}
-		++index.y;
-	}
-	params->map.map = map;
+	ret.x = map.x - map.y;
+	ret.y = map.z + map.x + map.y;
+	return (ret);
 }

@@ -25,6 +25,16 @@ int					key_hook(int keycode, t_params *params)
 		params->offset.y -= SPEED;
 	if (keycode == 125)
 		params->offset.y += SPEED;
+	if (keycode == 69 || keycode == 78)
+	{
+		if (keycode == 69 && params-> zoom <= 20)
+			params->zoom += 1;
+		if (keycode == 78 && params->zoom >= 1)
+			params->zoom -= 1;
+		ft_bzero(params->img.data, WIDTH * 4 * HEIGHT * 4 * 4);
+		draw_map(params);
+	}
+	mlx_clear_window(params->e.mlx, params->e.win);
 	mlx_put_image_to_window(params->e.mlx, params->e.win, params->img.img,
 		params->offset.x, params->offset.y);
 	return (0);
@@ -32,5 +42,14 @@ int					key_hook(int keycode, t_params *params)
 
 int					loop_hook(t_params *params)
 {
+	if (params->redraw == 1)
+	{
+		mlx_clear_window(params->e.mlx, params->e.win);
+		ft_bzero(params->img.data, WIDTH * 4 * HEIGHT * 4 * 4);
+		draw_map(params);
+		mlx_put_image_to_window(params->e.mlx, params->e.win, params->img.img,
+			params->offset.x, params->offset.y);
+		params->redraw = 0;
+	}
 	return (0);
 }

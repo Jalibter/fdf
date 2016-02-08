@@ -21,7 +21,7 @@ SRCS=$(SRCS_DIR)main.c \
 	 $(SRCS_DIR)draw.c
 OBJS=$(SRCS:.c=.o)
 	INC_DIR=-I./includes/ -I./libft/includes/
-	LIB_DIR=-L./libft -lft -L./minilibx -lmlx -framework OpenGL -framework AppKit -L/usr/includes/X11 -lX11
+	LIB_DIR=-L./libft -lft -L./minilibx -lmlx -framework OpenGL -framework AppKit
 	LIB_MAKE=libft/
 
 all		: $(NAME)

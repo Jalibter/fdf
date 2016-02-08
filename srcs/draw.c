@@ -55,14 +55,14 @@ void				draw_line_ptb(t_img *img, t_vec a, t_vec b,
 
 }
 
-void				draw_line(t_img *img, t_vec a, t_vec b, int color)
+void				draw_line(t_params *params, t_vec a, t_vec b, int color)
 {
 	t_vec			p;
 
-	a.x = a.x * 30 + 300;
-	a.y = a.y * 30 + 300;
-	b.x = b.x * 30 + 300;
-	b.y = b.y * 30 + 300;
+	a.x = a.x * params->zoom;
+	a.y = a.y * params->zoom;
+	b.x = b.x * params->zoom;
+	b.y = b.y * params->zoom;
 
 	p.x = a.x - b.x;
 	p.y = a.y - b.y;
@@ -72,14 +72,14 @@ void				draw_line(t_img *img, t_vec a, t_vec b, int color)
 		p.y = -p.y;
 	if (p.x > p.y)
 		if (a.x <= b.x)
-			draw_line_pta(img, a, b, color);
+			draw_line_pta(&params->img, a, b, color);
 		else
-			draw_line_pta(img, b, a, color);
+			draw_line_pta(&params->img, b, a, color);
 	else
 		if (a.y < b.y)
-			draw_line_ptb(img, a, b, color);
+			draw_line_ptb(&params->img, a, b, color);
 		else
-			draw_line_ptb(img, b, a, color);
+			draw_line_ptb(&params->img, b, a, color);
 }
 
 void				draw_map(t_params *params)
@@ -89,15 +89,17 @@ void				draw_map(t_params *params)
 	int				color;
 
 	y = 0;
-	while (y < params->map.max.y - 1)
+	while (y < params->map.max.y)
 	{
 		x = 0;
-		while (x < params->map.max.x - 1)
+		while (x < params->map.max.x)
 		{
-			draw_line(&params->img, params->map.map[y][x],
-				params->map.map[y][x + 1], 0xFF5588);
-			draw_line(&params->img, params->map.map[y][x],
-				params->map.map[y + 1][x], 0xFF21AA);
+			if (x > 0)
+				draw_line(params, get_2d_map(params->map.map[y][x]),
+					get_2d_map(params->map.map[y][x - 1]), 0xFF5588);
+			if (y > 0 || (y > 0 && x == 0))
+				draw_line(params, get_2d_map(params->map.map[y][x]),
+					get_2d_map(params->map.map[y - 1][x]), 0xAAFFCC);
 			++x;
 		}
 		++y;

@@ -6,7 +6,6 @@
 # include <fcntl.h>
 # include <stdlib.h>
 # include <math.h>
-# include <X11/x.h>
 
 # include "libft.h"
 # include "get_next_line.h"
@@ -67,7 +66,7 @@ void				malloc_error();
 */
 
 void				read_map(t_params *params, char *file);
-void				get_2d_map(t_params *params);
+t_vec				get_2d_map(t_vec map);
 
 /*
 ** hook.h
@@ -80,7 +79,7 @@ int					loop_hook(t_params *params);
 ** draw.c
 */
 
-void				draw_line(t_img *img, t_vec a, t_vec b, int color);
+void				draw_line(t_params *params, t_vec a, t_vec b, int color);
 void				draw_map(t_params *params);
 
 #endif
